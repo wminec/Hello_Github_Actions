@@ -29,7 +29,7 @@ jobs:
           with:
             # Artifact name
             name: GitHubActionsHelloWorldConsoleDownloadableArtifact # .zip will be added automatically
-            path: bin/release/net8.0/*.*
+            path: ./bin/release/net8.0/*.*
 
         - name: check pwd
           run: pwd
