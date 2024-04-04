@@ -26,12 +26,13 @@ jobs:
 
         - name: Run it for fun
           run: dotnet bin/Debug/net8.0/Hello_Github_Actions.dll
+
         - name: Upload a Build Artifact
           uses: actions/upload-artifact@v4
           with:
             # Artifact name
             name: HelloWorldDebug # .zip will be added automatically
-            path: bin/Release/net8.0/*.*
+            path: bin/Debug/net8.0/*.*
 
     release-build:
         needs: debug-build
