@@ -5,8 +5,38 @@ on:
         branches: [ main ]
 
 jobs:
-    build:
-        name: Build the app
+    debug-build:
+        name: Build a debug version of the app
+        runs-on: ubuntu-latest
+
+        steps:
+        - name: Checkout source code
+          uses: actions/checkout@v4
+
+        - name: Setup .NET
+          uses: actions/setup-dotnet@v4
+          with:
+            dotnet-version: 8.0.x
+
+        - name: Restore dependencies
+          run: dotnet restore
+
+        - name: Build
+          run: dotnet build -c debug --no-restore
+
+        - name: Run it for fun
+          run: dotnet bin/Debug/net8.0/HelloWorldConsole.dll
+
+        - name: Upload a Build Artifact
+          uses: actions/upload-artifact@v4
+          with:
+            # Artifact name
+            name: HelloWorldDebug # .zip will be added automatically
+            path: bin/Release/net8.0/*.*
+
+    release-build:
+        needs: debug-build
+        name: Build a release version of the app
         runs-on: ubuntu-latest
 
         steps:
@@ -24,12 +54,12 @@ jobs:
         - name: Build
           run: dotnet build -c release --no-restore
 
+        - name: Run it for fun
+          run: dotnet bin/Release/net8.0/HelloWorldConsole.dll
+
         - name: Upload a Build Artifact
           uses: actions/upload-artifact@v4
           with:
             # Artifact name
-            name: GitHubActionsHelloWorldConsoleDownloadableArtifact # .zip will be added automatically
+            name: HelloWorldDebug # .zip will be added automatically
             path: bin/Release/net8.0/*.*
-
-        - name: check pwd
-          run: pwd
