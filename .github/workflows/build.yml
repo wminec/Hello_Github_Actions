@@ -25,8 +25,7 @@ jobs:
           run: dotnet build -c debug --no-restore
 
         - name: Run it for fun
-          run: dotnet bin/Debug/net8.0/HelloWorldConsole.dll
-
+          run: dotnet bin/Debug/net8.0/Hello_Github_Actions.dll
         - name: Upload a Build Artifact
           uses: actions/upload-artifact@v4
           with:
@@ -55,7 +54,7 @@ jobs:
           run: dotnet build -c release --no-restore
 
         - name: Run it for fun
-          run: dotnet bin/Release/net8.0/HelloWorldConsole.dll
+          run: dotnet bin/Release/net8.0/Hello_Github_Actions.dll
 
         - name: Upload a Build Artifact
           uses: actions/upload-artifact@v4
