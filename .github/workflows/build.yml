@@ -14,7 +14,7 @@ jobs:
           uses: actions/checkout@v4
 
         - name: Setup .NET
-          uses: actions/setup-dotnet@v3
+          uses: actions/setup-dotnet@v4
           with:
             dotnet-version: 8.0.x
 
@@ -30,3 +30,6 @@ jobs:
             # Artifact name
             name: GitHubActionsHelloWorldConsoleDownloadableArtifact # .zip will be added automatically
             path: bin/release/net8.0/*.*
+
+        - name: check pwd
+          run: pwd
