@@ -59,16 +59,28 @@ jobs:
             cd create_tfstate_storage
             terraform init
             terraform apply -auto-approve
+          working-directory: Hello_Actions_with_Terraform_Azure
+
+        - name: Create keyvault for tfstate
+          id: create_keyvault
+          if: ${{ github.event.inputs.terraform_operation == 'create_tfstate_storage' }}
+          run: |
             ACCOUNT_KEY=$(az storage account keys list --resource-group tfstate --account-name tfstateaction --query '[0].value' -o tsv)
             echo $ACCOUNT_KEY
-            az keyvault create --name tfstate --resource-group tfstate --location westus2
-            az keyvault secret set --vault-name tfstate --name tfstate-key --value $ACCOUNT_KEY
+            az keyvault create --name tfstate-githubactions --resource-group tfstate --location westus2
+            az keyvault secret set --vault-name tfstate-githubactions --name tfstate-key --value $ACCOUNT_KEY
+          working-directory: Hello_Actions_with_Terraform_Azure
+
+        - name: get keyvault secret
+          id: get_keyvault_secret
+          run: |
+            export ARM_ACCESS_KEY=$(az keyvault secret show --name tfstate-key --vault-name tfstate-githubactions --query value -o tsv)
+            echo $ARM_ACCESS_KEY
           working-directory: Hello_Actions_with_Terraform_Azure
 
         - name: Terraform Init
           id: init
           run: |
-            export ARM_ACCESS_KEY=$(az keyvault secret show --name tfstate-key --vault-name tfstate --query value -o tsv)
             terraform init
           working-directory: Hello_Actions_with_Terraform_Azure
 
