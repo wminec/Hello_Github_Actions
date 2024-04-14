@@ -4,11 +4,12 @@ on:
     workflow_dispatch:
       inputs:
         terraform_operation:
-          description: 'Terraform Operation: apply, destory'
+          description: 'Terraform Operation: init_storage, plan, apply, destory'
           required: true
           default: 'plan'
           type: choice
           options:
+            - 'init_storage'
             - 'plan'
             - 'apply'
             - 'destory'
@@ -50,6 +51,15 @@ jobs:
           uses: hashicorp/setup-terraform@v3
           with:
             terraform_version: 1.7.5
+
+        - name: Create Terraform tfstate Storage
+          id: init_storage
+          if: ${{ github.event.inputs.terraform_operation == 'init_storage' }}
+          run: |
+            cd init_storage
+            teraform init
+            terraform apply -auto-approve
+          working-directory: Hello_Actions_with_Terraform_Azure
 
         - name: Terraform Init
           id: init
