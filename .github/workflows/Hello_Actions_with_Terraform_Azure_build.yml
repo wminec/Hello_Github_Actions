@@ -6,9 +6,10 @@ on:
         terraform_operation:
           description: 'Terraform Operation: apply, destory'
           required: true
-          default: 'apply'
+          default: 'plan'
           type: choice
           options:
+            - 'plan'
             - 'apply'
             - 'destroy'
 
