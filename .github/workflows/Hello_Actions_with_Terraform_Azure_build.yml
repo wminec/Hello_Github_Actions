@@ -86,6 +86,7 @@ jobs:
 
         - name: Terraform Plan
           id: tplan
+          if: ${{ github.event.inputs.terraform_operation == 'plan' }}
           env:
             TF_VAR_secret: '${{ secrets.example_secret }}'
           run: |
