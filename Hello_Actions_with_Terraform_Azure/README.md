@@ -1,26 +1,29 @@
-# Project Name
+# Hello_Actions_with_Terraform_Azure
 
-A brief description of your project.
+This repository contains a sample project that demonstrates how to use GitHub Actions with Terraform to deploy resources in Azure.
 
-## Table of Contents
+## Prerequisites
+Before you can use this project, make sure you have the following prerequisites:
+- An Azure subscription
+- az command istalled on your local machine (for local test)
+- Terraform installed on your local machine (for local test)
 
-- [Installation](#installation)
-- [Usage](#usage)
-- [Contributing](#contributing)
-- [License](#license)
+## Getting Started
+To get started with this project, follow these steps:  
+Ref : https://learn.microsoft.com/ko-kr/azure/developer/github/connect-from-azure?tabs=azure-portal%2Cwindows
 
-## Installation
+1. Clone the repository to your local machine and Push your Repository (or just fork this repository)
 
-Instructions on how to install and set up your project.
+2. Create Azure app and Service Principal  
 
-## Usage
+3. Add Federated credentials to Azure App
 
-Examples and instructions on how to use your project.
+4. Set Actions Repository secrets :
+    ```
+    AZURE_CLIENT_ID         = Application(Client) ID
+    AZURE_SUBSCRIPTION_ID   = Subscription ID
+    AZURE_TENANT_ID         = Directory(Tenant) ID
+    ```
+5. Run Workflow with "create_tfstate_storage" input.
 
-## Contributing
-
-Guidelines for contributing to your project.
-
-## License
-
-Information about the license for your project.
+6. Run Execute workflow in order of "plan", "apply", "destroy".
