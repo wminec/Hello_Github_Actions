@@ -99,7 +99,7 @@ jobs:
 
         - name: Checkov Plan Test
           id: cplan
-          if: github.event_name == 'pull_request' && ${{ github.event.inputs.terraform_operation == 'plan' }}
+          if: "github.event_name == 'pull_request' && ${{ github.event.inputs.terraform_operation == 'plan' }}"
           env:
             TF_VAR_secret: '${{ secrets.example_secret }}'
           run: |
