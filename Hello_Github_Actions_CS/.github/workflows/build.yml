@@ -2,7 +2,13 @@ name: A workflow to build an application
 
 on:
     push:
-        branches: [ main ]
+      branches: [ main ]
+      paths:
+          - 'Hello_Github_Actions_CS/**'
+    pull_request:
+      branches: [ main ]
+      paths:
+          - 'Hello_Github_Actions_CS/**'
 
 jobs:
     debug-build:
