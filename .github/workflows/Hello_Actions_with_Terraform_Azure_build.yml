@@ -57,7 +57,7 @@ jobs:
           if: ${{ github.event.inputs.terraform_operation == 'create_tfstate_storage' }}
           run: |
             cd create_tfstate_storage
-            teraform init
+            terraform init
             terraform apply -auto-approve
             echo $(az storage account keys list --resource-group tfstate --account-name tfstateaction --query '[0].value' -o tsv)
           working-directory: Hello_Actions_with_Terraform_Azure
