@@ -6,7 +6,7 @@
             Console.WriteLine("Hello Github Actions! From debug build.");
         #endif
         #if RELEASE
-            Console.WriteLine("Hello Github Actions! From release build.");
+            Console.WriteLine("Hello Github Actions! From release build.!");
         #endif
     }
 }
