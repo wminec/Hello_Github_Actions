@@ -70,11 +70,11 @@ jobs:
             az keyvault secret set --vault-name tfstate-githubactions --name tfstate-key --value $ACCOUNT_KEY
           working-directory: Hello_Actions_with_Terraform_Azure
 
-        - name: get keyvault secret
-          id: get_keyvault_secret
-          run: |
-            export ARM_ACCESS_KEY=$(az keyvault secret show --name tfstate-key --vault-name tfstate-githubactions --query value -o tsv)
-          working-directory: Hello_Actions_with_Terraform_Azure
+#        - name: get keyvault secret
+#          id: get_keyvault_secret
+#          run: |
+#            export ARM_ACCESS_KEY=$(az keyvault secret show --name tfstate-key --vault-name tfstate-githubactions --query value -o tsv)
+#          working-directory: Hello_Actions_with_Terraform_Azure
 
         - name: Terraform Init
           id: init
