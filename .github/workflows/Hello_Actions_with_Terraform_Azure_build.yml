@@ -1,6 +1,17 @@
 name: Basic Azure Terraform Workflow
 
 on:
+    workflow_dispatch:
+      inputs:
+        terraform_operation:
+          description: 'Terraform Operation: apply, destory'
+          required: true
+          default: 'apply'
+          type: choice
+          options:
+            - 'apply'
+            - 'destroy'
+
     push:
       branches: [ main ]
       paths:
@@ -135,7 +146,7 @@ jobs:
 
         - name: Terraform Apply
           id: apply
-          if: github.ref == 'ref/heads/main' && github.event_name == 'push'
+          if: github.ref == 'ref/heads/main' && github.event_name == 'push' && ${{ github.event.inputs.terraform_operation == 'apply' }}
           env:
             TF_VAR_domain_pass: '${{ secrets.DOMAIN_JOIN_PASS }}'
             TF_VAR_local_pass: '${{ secrets.LOCAL_ADMIN_PASS }}'
@@ -144,11 +155,16 @@ jobs:
             terraform apply -auto-approve
           working-directory: Hello_Actions_with_Terraform_Azure
 
-#        - name: Terraform Destroy
-#          id: destroy
-#          run: |
-#            terraform destroy -auto-approve
-#          working-directory: Hello_Actions_with_Terraform_Azure
+        - name: Terraform Destroy
+          id: destroy
+          if: github.ref == 'ref/heads/main' && github.event_name == 'push' && ${{ github.event.inputs.terraform_operation == 'destory' }}
+          env:
+            TF_VAR_domain_pass: '${{ secrets.DOMAIN_JOIN_PASS }}'
+            TF_VAR_local_pass: '${{ secrets.LOCAL_ADMIN_PASS }}'
+            TF_VAR_workspace_key: '${{ secrets.LA_WORKSPACE_KEY }}'
+          run: |
+            terraform destroy -auto-approve
+          working-directory: Hello_Actions_with_Terraform_Azure
 
           
 
