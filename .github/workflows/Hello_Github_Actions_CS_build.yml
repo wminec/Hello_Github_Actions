@@ -35,10 +35,6 @@ jobs:
         - name: Run it for fun
           run: dotnet bin/Debug/net8.0/Hello_Github_Actions.dll
           working-directory: Hello_Github_Actions_CS
-
-        - name: List files
-          run: ls -R
-          working-directory: Hello_Github_Actions_CS
         
         - name: Upload a Build Artifact
           uses: actions/upload-artifact@v4
@@ -64,16 +60,19 @@ jobs:
 
         - name: Restore dependencies
           run: dotnet restore
+          working-directory: Hello_Github_Actions_CS
 
         - name: Build
           run: dotnet build -c release --no-restore
+          working-directory: Hello_Github_Actions_CS
 
         - name: Run it for fun
           run: dotnet bin/Release/net8.0/Hello_Github_Actions.dll
+          working-directory: Hello_Github_Actions_CS
 
         - name: Upload a Build Artifact
           uses: actions/upload-artifact@v4
           with:
             # Artifact name
             name: HelloWorldRelease # .zip will be added automatically
-            path: bin/Release/net8.0/*.*
+            path: Hello_Github_Actions_CS/bin/Release/net8.0/*.*
