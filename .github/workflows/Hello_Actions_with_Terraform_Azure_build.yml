@@ -13,10 +13,6 @@ on:
             - 'apply'
             - 'destory'
 
-    push:
-      branches: [ main ]
-      paths:
-          - 'Hello_Actions_with_Terraform_Azure/**'
     pull_request:
       branches: [ main ]
       paths:
@@ -90,7 +86,6 @@ jobs:
 
         - name: Terraform Plan
           id: tplan
-          if: github.event.inputs.terraform_operation == 'plan'
           env:
             TF_VAR_secret: '${{ secrets.example_secret }}'
           run: |
@@ -99,7 +94,7 @@ jobs:
 
         - name: Checkov Plan Test
           id: cplan
-          if: github.event.inputs.terraform_operation == 'plan'
+          if: github.event_name == 'pull_request'
           env:
             TF_VAR_secret: '${{ secrets.example_secret }}'
           run: |
