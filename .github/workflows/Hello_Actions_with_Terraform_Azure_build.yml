@@ -1,0 +1,38 @@
+name: Basic Azure Terraform Workflow
+
+on:
+    push:
+      branches: [ main ]
+      paths:
+          - 'Hello_Actions_with_Terraform_Azrue/**'
+    pull_request:
+      branches: [ main ]
+      paths:
+          - 'Hello_Actions_with_Terraform_Azrue/**'
+
+jobs:
+    terraform:
+        name: Build a debug version of the app
+        runs-on: ubuntu-latest
+
+        steps:
+        - name: Code Checkout
+          id: checkout
+          uses: actions/checkout@v4
+
+        - name: Azure Authentication
+          id: login
+          uses: azure/login@v1
+          with:
+            client-id: ${{ secrets.AZURE_CLIENT_ID }}
+            tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+            subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+        - name: Run Azure CLI commands
+          run: |
+              az account show
+              az group list --output table
+              pwd
+        
+
+
