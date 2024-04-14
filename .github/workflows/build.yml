@@ -45,7 +45,7 @@ jobs:
           with:
             # Artifact name
             name: HelloWorldDebug # .zip will be added automatically
-            path: bin/Debug/net8.0/*.*
+            path: Hello_Github_Actions_CS/bin/Debug/net8.0/*.*
           
 
     release-build:
