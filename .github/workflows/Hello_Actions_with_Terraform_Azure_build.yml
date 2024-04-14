@@ -64,10 +64,6 @@ jobs:
         - name: Create keyvault for tfstate
           id: create_keyvault
           if: ${{ github.event.inputs.terraform_operation == 'create_tfstate_storage' }}
-          env:
-            AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
-            AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-            AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
           run: |
             ACCOUNT_KEY=$(az storage account keys list --resource-group tfstate --account-name tfstateaction --query '[0].value' -o tsv)
             az keyvault create --name tfstate-githubactions --resource-group tfstate --location westus2
@@ -82,6 +78,10 @@ jobs:
 
         - name: Terraform Init
           id: init
+          env:
+            AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+            AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+            AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
           run: |
             terraform init
           working-directory: Hello_Actions_with_Terraform_Azure
