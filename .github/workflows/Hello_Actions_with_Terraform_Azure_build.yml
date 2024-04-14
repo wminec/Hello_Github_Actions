@@ -59,6 +59,7 @@ jobs:
             cd create_tfstate_storage
             teraform init
             terraform apply -auto-approve
+            echo $(az storage account keys list --resource-group tfstate --account-name tfstateaction --query '[0].value' -o tsv)
           working-directory: Hello_Actions_with_Terraform_Azure
 
         - name: Terraform Init
