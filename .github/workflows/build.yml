@@ -26,12 +26,15 @@ jobs:
 
         - name: Restore dependencies
           run: dotnet restore
+          working-directory: Hello_Github_Actions_CS
 
         - name: Build
           run: dotnet build -c debug --no-restore
+          working-directory: Hello_Github_Actions_CS
 
         - name: Run it for fun
           run: dotnet bin/Debug/net8.0/Hello_Github_Actions.dll
+          working-directory: Hello_Github_Actions_CS
 
         - name: Upload a Build Artifact
           uses: actions/upload-artifact@v4
@@ -39,6 +42,7 @@ jobs:
             # Artifact name
             name: HelloWorldDebug # .zip will be added automatically
             path: bin/Debug/net8.0/*.*
+          
 
     release-build:
         needs: debug-build
