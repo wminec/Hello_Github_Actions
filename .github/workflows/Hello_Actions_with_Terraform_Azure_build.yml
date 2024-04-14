@@ -4,11 +4,11 @@ on:
     push:
       branches: [ main ]
       paths:
-          - 'Hello_Actions_with_Terraform_Azrue/**'
+          - 'Hello_Actions_with_Terraform_Azure/**'
     pull_request:
       branches: [ main ]
       paths:
-          - 'Hello_Actions_with_Terraform_Azrue/**'
+          - 'Hello_Actions_with_Terraform_Azure/**'
 
 jobs:
     terraform:
