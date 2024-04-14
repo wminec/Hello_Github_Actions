@@ -47,6 +47,8 @@ jobs:
     release-build:
         needs: debug-build
         name: Build a release version of the app
+        environment:
+          name: release
         runs-on: ubuntu-latest
 
         steps:
