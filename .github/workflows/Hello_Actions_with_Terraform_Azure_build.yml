@@ -4,12 +4,12 @@ on:
     workflow_dispatch:
       inputs:
         terraform_operation:
-          description: 'Terraform Operation: init_storage, plan, apply, destory'
+          description: 'Terraform Operation: create_tfstate_storage, plan, apply, destory'
           required: true
           default: 'plan'
           type: choice
           options:
-            - 'init_storage'
+            - 'create_tfstate_storage'
             - 'plan'
             - 'apply'
             - 'destory'
@@ -53,10 +53,10 @@ jobs:
             terraform_version: 1.7.5
 
         - name: Create Terraform tfstate Storage
-          id: init_storage
-          if: ${{ github.event.inputs.terraform_operation == 'init_storage' }}
+          id: create_tfstate_storage
+          if: ${{ github.event.inputs.terraform_operation == 'create_tfstate_storage' }}
           run: |
-            cd init_storage
+            cd create_tfstate_storage
             teraform init
             terraform apply -auto-approve
           working-directory: Hello_Actions_with_Terraform_Azure
