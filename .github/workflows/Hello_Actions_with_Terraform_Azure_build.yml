@@ -10,6 +10,10 @@ on:
       paths:
           - 'Hello_Actions_with_Terraform_Azure/**'
 
+permissions:
+    id-token: write
+    contents: read
+
 jobs:
     terraform:
         name: Build a debug version of the app
