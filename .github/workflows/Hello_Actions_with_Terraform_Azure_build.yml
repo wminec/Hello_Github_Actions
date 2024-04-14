@@ -46,7 +46,7 @@ jobs:
         - name: Terraform Init
           id: init
           run: |
-            teraform init
+            terraform init
           working-directory: Hello_Actions_with_Terraform_Azure
 
         - name: Install Checkov
