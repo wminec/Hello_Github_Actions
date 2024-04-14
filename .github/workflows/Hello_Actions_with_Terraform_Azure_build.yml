@@ -32,11 +32,123 @@ jobs:
             tenant-id: ${{ secrets.AZURE_TENANT_ID }}
             subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-        - name: Run Azure CLI commands
-          run: |
-              az account show
-              az group list --output table
-              pwd
+#        - name: Run Azure CLI commands
+#          run: |
+#              az account show
+#              az group list --output table
+#              pwd
         
+        - name: Install Terraform
+          uses: hashicorp/setup-terraform@v3
+          with:
+            terraform_version: 1.7.5
 
+        - name: Terraform Init
+          id: init
+          run: |
+            teraform init
+          working-directory: Hello_Actions_with_Terraform_Azure
+
+        - name: Install Checkov
+          id: checkov
+          if: github.event_name == 'pull_request'
+          run: |
+            pip install checkov
+          working-directory: Hello_Actions_with_Terraform_Azure
+
+        - name: Checkov Static Test
+          id: static
+          if: github.event_name == 'pull_request'
+          run: |
+            checkov --directory Hello_Actions_with_Terraform_Azure --download-external-modules true
+          working-directory: Hello_Actions_with_Terraform_Azure
+
+        - name: Terraform Format
+          id: fmt
+          run: |
+            terraform fmt -check -recursive
+          working-directory: Hello_Actions_with_Terraform_Azure
+          continue-on-error: true
+
+        - name: Terraform Validate
+          id: validate
+          run: |
+            terraform validate -no-color
+          working-directory: Hello_Actions_with_Terraform_Azure
+
+        - name: Terraform Plan
+          id: tplan
+          env:
+            TF_VAR_secret: '${{ secrets.example_secret }}'
+          run: |
+            terraform plan -no-color
+          working-directory: Hello_Actions_with_Terraform_Azure
+
+        - name: Checkov Plan Test
+          id: cplan
+          if: github.event_name == 'pull_request'
+          env:
+            TF_VAR_secret: '${{ secrets.example_secret }}'
+          run: |
+            terraform plan --out plan.tfplan
+            terraform show -json plan.tfplan > tfplan.json
+            ls
+            checkov -f tfplan.json --framework terraform_plan
+
+        - name: Pull Request Comment
+          id: comment
+          uses: actions/github-script@v3
+          if: github.event_name == 'pull_request'
+          env:
+            TPLAN: "terraform\n${{ steps.tplan.outputs.stdout }}"
+          with:
+            github-token: ${{ secrets.GHTOKEN }}
+            script: |
+              const output = `
+              ### Pull Request Information
+              Please review this pull request. Merging the PR will run Terraform Apply with the plan detailed below.
+    
+              #### Terraform Checks
+              Init: \`${{ steps.init.outcome }}\`
+              Format: \`${{ steps.fmt.outcome }}\`
+              Validation: \`${{ steps.validate.outcome }}\`
+              Plan: \`${{ steps.tplan.outcome }}\`
+    
+              #### Checkov
+              Static: \`${{ steps.static.outcome }}\`
+              Plan: \`${{ steps.cplan.outcome }}\`
+    
+              <details><summary>Plan File</summary>
+    
+              \`\`\`${process.env.TPLAN}\`\`\`
+    
+              </details>
+    
+              `
+              github.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: output
+              })
+
+
+        - name: Terraform Apply
+          id: apply
+          if: github.ref == 'ref/heads/main' && github.event_name == 'push'
+          env:
+            TF_VAR_domain_pass: '${{ secrets.DOMAIN_JOIN_PASS }}'
+            TF_VAR_local_pass: '${{ secrets.LOCAL_ADMIN_PASS }}'
+            TF_VAR_workspace_key: '${{ secrets.LA_WORKSPACE_KEY }}'
+          run: |
+            terraform apply -auto-approve
+          working-directory: Hello_Actions_with_Terraform_Azure
+
+#        - name: Terraform Destroy
+#          id: destroy
+#          run: |
+#            terraform destroy -auto-approve
+#          working-directory: Hello_Actions_with_Terraform_Azure
+
+          
 
