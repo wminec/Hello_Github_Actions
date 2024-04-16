@@ -66,14 +66,14 @@ jobs:
             terraform apply -auto-approve
           working-directory: Hello_Actions_with_Terraform_Azure
 
-        - name: Create keyvault for tfstate
-          id: create_keyvault
-          if: ${{ github.event.inputs.terraform_operation == 'create_tfstate_storage' }}
-          run: |
-            ACCOUNT_KEY=$(az storage account keys list --resource-group tfstate --account-name tfstateaction --query '[0].value' -o tsv)
-            az keyvault create --name tfstate-githubactions --resource-group tfstate --location westus2
-            az keyvault secret set --vault-name tfstate-githubactions --name tfstate-key --value $ACCOUNT_KEY
-          working-directory: Hello_Actions_with_Terraform_Azure
+#        - name: Create keyvault for tfstate
+#          id: create_keyvault
+#          if: ${{ github.event.inputs.terraform_operation == 'create_tfstate_storage' }}
+#          run: |
+#            ACCOUNT_KEY=$(az storage account keys list --resource-group tfstate --account-name tfstateaction --query '[0].value' -o tsv)
+#            az keyvault create --name tfstate-githubactions --resource-group tfstate --location westus2
+#            az keyvault secret set --vault-name tfstate-githubactions --name tfstate-key --value $ACCOUNT_KEY
+#          working-directory: Hello_Actions_with_Terraform_Azure
 
 #        - name: get keyvault secret
 #          id: get_keyvault_secret
@@ -117,8 +117,8 @@ jobs:
         - name: Terraform Plan
           id: tplan
           if: ${{ github.event.inputs.terraform_operation == 'plan' }}
-          env:
-            TF_VAR_secret: '${{ secrets.example_secret }}'
+          # env:
+          #   TF_VAR_secret: '${{ secrets.example_secret }}'
           run: |
             terraform plan -no-color
           working-directory: Hello_Actions_with_Terraform_Azure
@@ -126,8 +126,8 @@ jobs:
         - name: Checkov Plan Test
           id: cplan
           if: github.event_name == 'pull_request'
-          env:
-            TF_VAR_secret: '${{ secrets.example_secret }}'
+          # env:
+          #   TF_VAR_secret: '${{ secrets.example_secret }}'
           run: |
             terraform plan --out plan.tfplan
             terraform show -json plan.tfplan > tfplan.json
@@ -175,10 +175,10 @@ jobs:
         - name: Terraform Apply
           id: apply
           if: ${{ github.event.inputs.terraform_operation == 'apply' }}
-          env:
-            TF_VAR_domain_pass: '${{ secrets.DOMAIN_JOIN_PASS }}'
-            TF_VAR_local_pass: '${{ secrets.LOCAL_ADMIN_PASS }}'
-            TF_VAR_workspace_key: '${{ secrets.LA_WORKSPACE_KEY }}'
+          # env:
+          #   TF_VAR_domain_pass: '${{ secrets.DOMAIN_JOIN_PASS }}'
+          #   TF_VAR_local_pass: '${{ secrets.LOCAL_ADMIN_PASS }}'
+          #   TF_VAR_workspace_key: '${{ secrets.LA_WORKSPACE_KEY }}'
           run: |
             terraform apply -auto-approve
           working-directory: Hello_Actions_with_Terraform_Azure
@@ -186,10 +186,10 @@ jobs:
         - name: Terraform Destroy
           id: destroy
           if: ${{ github.event.inputs.terraform_operation == 'destory' }}
-          env:
-            TF_VAR_domain_pass: '${{ secrets.DOMAIN_JOIN_PASS }}'
-            TF_VAR_local_pass: '${{ secrets.LOCAL_ADMIN_PASS }}'
-            TF_VAR_workspace_key: '${{ secrets.LA_WORKSPACE_KEY }}'
+          # env:
+          #   TF_VAR_domain_pass: '${{ secrets.DOMAIN_JOIN_PASS }}'
+          #   TF_VAR_local_pass: '${{ secrets.LOCAL_ADMIN_PASS }}'
+          #   TF_VAR_workspace_key: '${{ secrets.LA_WORKSPACE_KEY }}'
           run: |
             terraform destroy -auto-approve
           working-directory: Hello_Actions_with_Terraform_Azure
